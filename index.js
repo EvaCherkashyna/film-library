@@ -17,6 +17,13 @@ let awards = document.querySelector('.awards')
 
 //--------------------- addEventListeners
 
+searchInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      searchBtn .click();
+    }
+})
+
 searchBtn.addEventListener('click', searchFilm);
 containerMoreFilms.addEventListener('click', addMore);
 
