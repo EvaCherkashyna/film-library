@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+b {
+  font-weight: 1000 !important;
+  color: rgb(255, 255, 255);
+}
+p {
+  text-align: center;
+}
+h6 {
+  margin-bottom: 0;
+  color: white;
+}
+nav {
+  position: fixed !important;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #202020;
+}
+body {
+  background-color: rgb(56, 56, 56);
+}
+
+.nav-h1 {
+  color: rgb(255, 255, 255);
+  margin-left: 20px;
+}
+
+.navbar > .container-for-searchInput {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-right: 20px;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.search-input {
+  width: 300px;
+}
+
+.container-with-movies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 100px 20px auto;
+  background-color: transparent;
+}
+
+.container-more-films {
+  width: 100%;
+  height: 50px;
+  display: none;
+}
+.movie-container {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 496px;
+  color: rgb(172, 169, 169);
+  box-shadow: rgb(24 24 24) 0px 0px 20px 5px;
+  background: linear-gradient(#020202, rgb(163, 163, 163) 60%, black);
+  /* background-color: rgb(80, 16, 16); */
+  margin-bottom: 20px;
+}
+.btn-primary {
+  width: 250px;
+}
+.more-films-btn {
+  width: 100%;
+  height: 70px;
+  align-self: center;
+  justify-self: center;
+}
+.poster {
+  width: 250px;
+  height: 350px;
+}
+.title {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.imdbID {
+  display: none;
+}
+.img-poster {
+  width: 40%;
+  height: 85%;
+  /* position: relative; */
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url(https://m.media-amazon.com/images/M/MV5BMjE5MzcyNjk1M15BMl5BanBnXkFtZTcwMjQ4MjcxOQ@@._V1_SX300.jpg); */
+}
+.img-class {
+  width: 405px;
+  /* min-height: 600px; */
+  /* position: relative; */
+  /* background-image: url(https://m.media-amazon.com/images/M/MV5BMjE5MzcyNjk1M15BMl5BanBnXkFtZTcwMjQ4MjcxOQ@@._V1_SX300.jpg) cover;  */
+}
+
+.rated-year-genre,
+.plot,
+.fontColor {
+  color: rgb(204, 204, 204);
+  text-align: left;
+}
+
+.plot {
+  color: rgb(255, 255, 255);
+}
+
+.title-about {
+  min-width: 90%;
+  height: 70px;
+  line-height: 70px;
+  color: white;
+  margin-right: 30px;
+  background-color: rgb(59, 59, 59);
+}
+.aboutFilm {
+  width: 60%;
+
+  /* border: 1px solid black; */
+
+  height: 85%;
+}
+.containerAbout {
+  width: 80%;
+  height: 90%;
+  background-color: rgb(100, 100, 100);
+  position: fixed;
+  top: 5%;
+  left: 10%;
+  border-radius: 10px;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+}
