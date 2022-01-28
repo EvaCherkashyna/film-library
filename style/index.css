@@ -1,9 +1,16 @@
+
 * {
   margin: 0;
   padding: 0;
   text-align: center;
 }
-
+li{
+  list-style-type: none;
+  text-align: left;
+  width: 164px;
+  height: 45px;
+  line-height: 45px;
+}
 b {
   font-weight: 1000 !important;
   color: rgb(255, 255, 255);
@@ -16,6 +23,26 @@ h6 {
   margin-bottom: 0;
   color: white;
 }
+.span-category{
+  padding: 0;
+  line-height: 40px;
+  color: black;
+  height: 40px;
+  width: 100px;
+}
+.span-category:active:focus{
+  border: 0;
+  outline: 0;
+  box-shadow: 0 0 0 0 ;
+}
+.span-category:focus{
+  border: 0;
+  outline: 0;
+  color: rgb(255, 255, 255);
+  background-color: #1a1a1a;
+  box-shadow: 0 0 0 0 ;
+}
+
 nav {
   position: fixed !important;
   width: 100%;
@@ -32,6 +59,43 @@ body {
   margin-left: 20px;
 }
 
+.year-input{
+  height: 30px;
+  width: 200px;
+  line-height: 30px;
+  padding: 0 20px;
+  margin-left: 40px;
+  border:0
+}
+.year-btn{
+  height: 30px;
+  line-height: 30px;
+  padding: 0 20px;
+  border:0
+  /* margin-left: 15px; */
+}
+/* .btn-primary:active:focus{
+  box-shadow: 0 0 0 0;
+}
+.btn-primary:focus {
+  color: #fff;
+  background-color: #161616;
+  box-shadow: 0 0 0 0;
+  outline: 0;
+} */
+.form-control:focus {
+  color: #55595c;
+  background-color: #f7f7f9;
+  
+  outline: 0;
+  box-shadow: 0 0 0 0;
+}
+.container-for-yearInput{
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .navbar > .container-for-searchInput {
   display: flex;
   justify-content: flex-start;
@@ -51,8 +115,8 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-top: 150px;
   justify-content: space-around;
-  margin: 100px 20px auto;
   background-color: transparent;
 }
 
@@ -72,7 +136,7 @@ body {
   box-shadow: rgb(32 32 32) 0px 0px 20px 5px;
   margin-bottom: 20px;
 }
-.btn-primary {
+.btn-moreDetails {
   width: 250px;
 }
 .more-films-btn {
@@ -86,6 +150,21 @@ body {
   height: 350px;
   background-size: 250px;
 }
+.fas{
+  size: 20px;
+}
+.label-containers{
+  display: flex;
+  width: 100%;
+  height: 40px;
+  top: 95px;
+ 
+  background-color: rgb(255 255 255);
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: fixed;
+}
+
 .title {
   height: 50px;
   display: flex;

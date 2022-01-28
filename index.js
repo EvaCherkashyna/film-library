@@ -1,54 +1,72 @@
 
-let searchBtn = document.querySelector('.search-btn');
-let searchInput = document.querySelector('.search-input');
-let containerMoreFilms = document.querySelector('.container-more-films');
-let container = document.querySelector('.container-with-movies');
+let getS = sel => document.querySelector(sel);
+let searchBtn = getS('.search-btn');
+let searchInput = getS('.search-input');
+let containerMoreFilms = getS('.container-more-films');
+let container = getS('.container-with-movies');
 let counter = 1;
-let containerAbout = document.querySelector('.containerAbout')
-let imgPoster = document.querySelector('.img-class');
-let plot = document.querySelector('.plot')
-let titleAbout = document.querySelector('.title-about')
-let ratedYearGenre = document.querySelector('.rated-year-genre')
-let writenBy = document.querySelector('.writenBy');
-let directedBy = document.querySelector('.directedBy');
-let actors = document.querySelector('.actors')
-let boxOffice = document.querySelector('.boxOffice')
-let awards = document.querySelector('.awards')
+let containerAbout = getS('.containerAbout')
+let imgPoster = getS('.img-class');
+let plot = getS('.plot')
+let titleAbout = getS('.title-about')
+let ratedYearGenre = getS('.rated-year-genre')
+let writenBy = getS('.writenBy');
+let directedBy = getS('.directedBy');
+let actors = getS('.actors')
+let boxOffice = getS('.boxOffice')
+let awards = getS('.awards')
+let moreFilmsBtn = getS('.more-films-btn')
+let yearBtn = getS('.year-btn');
+let yearInput = getS('.year-input')
 
 //--------------------- addEventListeners
-
-searchInput.addEventListener("keyup", function(event) {
+getS(".films-span").addEventListener('click', seriesAndMoviesFilter)
+getS(".series-span").addEventListener('click', seriesAndMoviesFilter)
+yearBtn.addEventListener('click',searchByYear)
+searchBtn.addEventListener('click', searchMovieByTitle);
+containerMoreFilms.addEventListener('click', addMoreMovies);
+container.addEventListener('click', showMovieDetails);
+searchInput.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
-      event.preventDefault();
-      searchBtn .click();
+        event.preventDefault();
+        searchBtn.click();
     }
 })
-
-searchBtn.addEventListener('click', searchFilm);
-containerMoreFilms.addEventListener('click', addMore);
-
 //--------------------- addEventListener`s functions
 
-function searchFilm(event) {
+function searchByYear() {
     counter = 1;
+    container.innerHTML=''
+    addMoreCheck("year")
+    findMoviesByYear(searchInput.value, yearInput.value, counter)
+}
+function seriesAndMoviesFilter(e) {
+    counter = 1;
+    getS('.container-with-movies').innerHTML = ''
+    if (e.target.classList.contains("films-span")) {
+        findMoviesByType(getS(".search-input").value, 'movie', counter)
+        addMoreCheck("movie")
+    }
+    else if (e.target.classList.contains("series-span")) {
+        findMoviesByType(getS(".search-input").value, "series", counter)
+        addMoreCheck("series")
+    }
+}
+
+function searchMovieByTitle(event) {
+    counter = 1;
+    addMoreCheck("add")
     event.preventDefault();
     let sValue = searchInput.value;
-    let dataBase = getData(sValue, counter);
     container.innerHTML = ''
-    dataBase.Search.forEach(element => {
-        createFilm(element.Poster, element.Title, element.Type, element.Year, element.imdbID);
-    });
-    container.addEventListener('click', showMovieDetails);
-
+    findMoviesByTitle(sValue, counter);
 }
 
 function showMovieDetails(e) {
 
     if (e.target.className.includes('btn-moreDetails')) {
-
         let movieId = e.target.getAttribute('data-id');
-        let movieData = getId(movieId);
-
+        let movieData = findMoviesById(movieId);
         containerAbout.style.display = "flex";
         imgPoster.src = `${movieData.Poster}`;
         titleAbout.innerHTML = movieData.Title;
@@ -58,68 +76,106 @@ function showMovieDetails(e) {
         directedBy.innerHTML = `<b>Directed By:</b> ${movieData.Director}`;
         actors.innerHTML = `<b>Actors:</b> ${movieData.Actors}`;
         boxOffice.innerHTML = `<b>BoxOffice:</b> ${movieData.BoxOffice}`;
-        awards.innerHTML = `<b>BoxOffice:</b> ${movieData.Awards}`
+        awards.innerHTML = `<b>Awards:</b> ${movieData.Awards}`
 
     }
     else {
         containerAbout.style.display = "none"
     }
 }
+//--------------------- helper function
 
-//--------------------- creating and adding items with films
+function addMoreCheck(value) {
+    moreFilmsBtn.setAttribute('data-type', value);
+}
+//--------------------- creating and adding items with movies
 
-function createFilm(poster, title, type, year, imdbID) {
-
-    container.innerHTML += `
-    <div class="movie-container">
-        <div style="background-image:url(${poster});"
-             class="poster"></div>
-        <div class="title">
-            <h6>${title}</h6>
-        </div>
-        <p class="type-year">${type} ${year}</p>
-        <button type="button" data-id="${imdbID}" class="btn btn-primary btn-moreDetails">More details</button>
-        <p class="imdbID">${imdbID}</p>
-    </div> `
+function createMovieList(dataBase) {
+    dataBase.Search.forEach(element => {
+        container.innerHTML += `
+        <div class="movie-container">
+            <div style="background-image:url(${element.Poster});"
+                 class="poster"></div>
+            <div class="title">
+                <h6>${element.Title}</h6>
+            </div>
+            <p class="type-year">${element.Type} ${element.Year}</p>
+            <button type="button" data-id="${element.imdbID}" class="btn btn-primary btn-moreDetails">More details</button>
+            <p class="imdbID">${element.imdbID}</p>
+        </div> `
+    });
     containerMoreFilms.style.display = "block"
 }
 
-function addMore() {
+function addMoreMovies() {
     counter++;
     let searchInputValue = searchInput.value;
-    const dataBase = getData(searchInputValue, counter);
-    dataBase.Search.forEach(element => {
-        createFilm(element.Poster, element.Title, element.Type, element.Year, element.imdbID);
-    });
+    if (moreFilmsBtn.getAttribute('data-type') == 'series') {
+        findMoviesByType(searchInputValue, 'series', counter);
+    }
+    else if (moreFilmsBtn.getAttribute('data-type') == 'movie') {
+       findMoviesByType(searchInputValue, 'movie', counter);
+    }
+    else if (moreFilmsBtn.getAttribute('data-type') == 'add') {
+        findMoviesByTitle(searchInputValue, counter);
+    }
+    else if (moreFilmsBtn.getAttribute('data-type') == 'year'){
+        findMoviesByYear(searchInputValue, yearInput.value, counter)
+    }
     container.addEventListener('click', showMovieDetails)
 }
 //-------------------functions with XMLHttpRequest
 
-function getData(searchInputValue, counterOfPage) {
-    let movieData;
+function findMoviesByType(searchInputValue, movieType, page) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&type=${movieType}&page=${page}&apikey=b626f23c`, false)
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status >= 200) {
+            const data = JSON.parse(xhr.responseText);
+            createMovieList(data)
+        }
+    }
+    xhr.send();
+}
+function findMoviesByTitle(searchInputValue, counterOfPage) {
+   
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&page=${counterOfPage}&apikey=b626f23c`, false)
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status >= 200) {
             const data = JSON.parse(xhr.responseText);
-            movieData = data;
+            createMovieList(data)
+
         }
     }
     xhr.send();
-    return movieData;
+
+}
+function findMoviesByYear(searchInputValue,year,counterOfPage) {
+   
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`, false)
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status >= 200) {
+            const data = JSON.parse(xhr.responseText);
+            createMovieList(data)
+        }
+    }
+    xhr.send();
+
 }
 
-function getId(id) {
-    let movieDetails;
+function findMoviesById(id) {
+    let movieId;
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `http://www.omdbapi.com/?i=${id}&apikey=b626f23c`, false)
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status >= 200) {
             const data = JSON.parse(xhr.responseText);
-            movieDetails = data;
-
+            movieId=data
         }
     }
     xhr.send();
-    return movieDetails;
+    return movieId
 }
+
