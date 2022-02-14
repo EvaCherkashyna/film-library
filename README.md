@@ -4,7 +4,7 @@
 
 This is a film library where you can find movies by title and see information about them.
 
-You can also use filters and search for movies or series by year.
+You can also use filters and search for movies by year and type.
 
 I used OMDb API to access information about movies.
 

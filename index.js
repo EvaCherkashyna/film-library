@@ -66,18 +66,21 @@ function showMovieDetails(e) {
 
     if (e.target.className.includes('btn-moreDetails')) {
         let movieId = e.target.getAttribute('data-id');
-        let movieData = findMoviesById(movieId);
-        containerAbout.style.display = "flex";
-        imgPoster.src = `${movieData.Poster}`;
-        titleAbout.innerHTML = movieData.Title;
-        ratedYearGenre.innerHTML = `${movieData.Rated} ${movieData.Year} ${movieData.Genre}`;
-        plot.innerHTML = movieData.Plot
-        writenBy.innerHTML = `<b>Writen By:</b> ${movieData.Writer}`;
-        directedBy.innerHTML = `<b>Directed By:</b> ${movieData.Director}`;
-        actors.innerHTML = `<b>Actors:</b> ${movieData.Actors}`;
-        boxOffice.innerHTML = `<b>BoxOffice:</b> ${movieData.BoxOffice}`;
-        awards.innerHTML = `<b>Awards:</b> ${movieData.Awards}`
+        findMoviesById(movieId).then((data)=> {
+            let movieData = data;
+            containerAbout.style.display = "flex";
+            imgPoster.src = `${movieData.Poster}`;
+            titleAbout.innerHTML = movieData.Title;
+            ratedYearGenre.innerHTML = `${movieData.Rated} ${movieData.Year} ${movieData.Genre}`;
+            plot.innerHTML = movieData.Plot
+            writenBy.innerHTML = `<b>Writen By:</b> ${movieData.Writer}`;
+            directedBy.innerHTML = `<b>Directed By:</b> ${movieData.Director}`;
+            actors.innerHTML = `<b>Actors:</b> ${movieData.Actors}`;
+            boxOffice.innerHTML = `<b>BoxOffice:</b> ${movieData.BoxOffice}`;
+            awards.innerHTML = `<b>Awards:</b> ${movieData.Awards}`
+        }).catch(()=>{
 
+        });
     }
     else {
         containerAbout.style.display = "none"
@@ -151,31 +154,23 @@ function findMoviesByTitle(searchInputValue, counterOfPage) {
     xhr.send();
 
 }
-function findMoviesByYear(searchInputValue,year,counterOfPage) {
-   
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`, false)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status >= 200) {
-            const data = JSON.parse(xhr.responseText);
-            createMovieList(data)
-        }
-    }
-    xhr.send();
-
+async function findMoviesByYear(searchInputValue, counterOfPage) {
+    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`);
+    let movieId = await response.json();
+    createMovieList(movieId)
+}
+async function findMoviesByYear(searchInputValue,year,counterOfPage) {
+    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`);
+    let movieId = await response.json();
+    createMovieList(movieId)
 }
 
-function findMoviesById(id) {
+
+async function findMoviesById(id) {
     let movieId;
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://www.omdbapi.com/?i=${id}&apikey=b626f23c`, false)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status >= 200) {
-            const data = JSON.parse(xhr.responseText);
-            movieId=data
-        }
-    }
-    xhr.send();
-    return movieId
+    const response = await fetch(`http://www.omdbapi.com/?i=${id}&apikey=b626f23c`);
+     movieId = await response.json();
+    console.log(movieId); 
+    return movieId;
 }
 
