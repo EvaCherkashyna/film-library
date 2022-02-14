@@ -22,7 +22,7 @@ let yearInput = getS('.year-input')
 //--------------------- addEventListeners
 getS(".films-span").addEventListener('click', seriesAndMoviesFilter)
 getS(".series-span").addEventListener('click', seriesAndMoviesFilter)
-yearBtn.addEventListener('click',searchByYear)
+yearBtn.addEventListener('click', searchByYear)
 searchBtn.addEventListener('click', searchMovieByTitle);
 containerMoreFilms.addEventListener('click', addMoreMovies);
 container.addEventListener('click', showMovieDetails);
@@ -36,12 +36,14 @@ searchInput.addEventListener("keyup", function (event) {
 
 function searchByYear() {
     counter = 1;
-    container.innerHTML=''
+    container.innerHTML = ''
     addMoreCheck("year")
     findMoviesByYear(searchInput.value, yearInput.value, counter)
+
 }
 function seriesAndMoviesFilter(e) {
     counter = 1;
+    yearInput.value = ''
     getS('.container-with-movies').innerHTML = ''
     if (e.target.classList.contains("films-span")) {
         findMoviesByType(getS(".search-input").value, 'movie', counter)
@@ -63,10 +65,9 @@ function searchMovieByTitle(event) {
 }
 
 function showMovieDetails(e) {
-
     if (e.target.className.includes('btn-moreDetails')) {
         let movieId = e.target.getAttribute('data-id');
-        findMoviesById(movieId).then((data)=> {
+        findMoviesById(movieId).then((data) => {
             let movieData = data;
             containerAbout.style.display = "flex";
             imgPoster.src = `${movieData.Poster}`;
@@ -78,7 +79,7 @@ function showMovieDetails(e) {
             actors.innerHTML = `<b>Actors:</b> ${movieData.Actors}`;
             boxOffice.innerHTML = `<b>BoxOffice:</b> ${movieData.BoxOffice}`;
             awards.innerHTML = `<b>Awards:</b> ${movieData.Awards}`
-        }).catch(()=>{
+        }).catch(() => {
 
         });
     }
@@ -115,62 +116,42 @@ function addMoreMovies() {
     let searchInputValue = searchInput.value;
     if (moreFilmsBtn.getAttribute('data-type') == 'series') {
         findMoviesByType(searchInputValue, 'series', counter);
+        console.log("findMoviesByType series");
     }
     else if (moreFilmsBtn.getAttribute('data-type') == 'movie') {
-       findMoviesByType(searchInputValue, 'movie', counter);
+        findMoviesByType(searchInputValue, 'movie', counter);
+        console.log("findMoviesByType movie");
     }
     else if (moreFilmsBtn.getAttribute('data-type') == 'add') {
         findMoviesByTitle(searchInputValue, counter);
+        console.log("findMoviesByTitle");
     }
-    else if (moreFilmsBtn.getAttribute('data-type') == 'year'){
+    else if (moreFilmsBtn.getAttribute('data-type') == 'year') {
         findMoviesByYear(searchInputValue, yearInput.value, counter)
+        console.log(findMoviesByYear);
     }
     container.addEventListener('click', showMovieDetails)
 }
-//-------------------functions with XMLHttpRequest
+//-------------------functions with async request
 
-function findMoviesByType(searchInputValue, movieType, page) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&type=${movieType}&page=${page}&apikey=b626f23c`, false)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status >= 200) {
-            const data = JSON.parse(xhr.responseText);
-            createMovieList(data)
-        }
-    }
-    xhr.send();
+async function findMoviesByType(searchInputValue, movieType, page) {
+    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&type=${movieType}&page=${page}&apikey=b626f23c`);
+    let movieId = await response.json();
+    createMovieList(movieId)
 }
-function findMoviesByTitle(searchInputValue, counterOfPage) {
-   
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&page=${counterOfPage}&apikey=b626f23c`, false)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status >= 200) {
-            const data = JSON.parse(xhr.responseText);
-            createMovieList(data)
-
-        }
-    }
-    xhr.send();
-
+async function findMoviesByTitle(searchInputValue, counterOfPage) {
+    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&page=${counterOfPage}&apikey=b626f23c`);
+    let movieId = await response.json();
+    createMovieList(movieId)
 }
-async function findMoviesByYear(searchInputValue, counterOfPage) {
+async function findMoviesByYear(searchInputValue, year, counterOfPage) {
     const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`);
     let movieId = await response.json();
     createMovieList(movieId)
 }
-async function findMoviesByYear(searchInputValue,year,counterOfPage) {
-    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`);
-    let movieId = await response.json();
-    createMovieList(movieId)
-}
-
-
 async function findMoviesById(id) {
-    let movieId;
     const response = await fetch(`http://www.omdbapi.com/?i=${id}&apikey=b626f23c`);
-     movieId = await response.json();
-    console.log(movieId); 
+    let movieId = await response.json();
     return movieId;
 }
 
