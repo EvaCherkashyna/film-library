@@ -140,22 +140,8 @@ function findMoviesByType(searchInputValue, movieType, page) {
     }
     xhr.send();
 }
-function findMoviesByTitle(searchInputValue, counterOfPage) {
-   
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://www.omdbapi.com/?s=${searchInputValue}&page=${counterOfPage}&apikey=b626f23c`, false)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status >= 200) {
-            const data = JSON.parse(xhr.responseText);
-            createMovieList(data)
-
-        }
-    }
-    xhr.send();
-
-}
-async function findMoviesByYear(searchInputValue, counterOfPage) {
-    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&y=${year}&page=${counterOfPage}&apikey=b626f23c`);
+async function findMoviesByTitle(searchInputValue, counterOfPage) {
+    const response = await fetch(`http://www.omdbapi.com/?s=${searchInputValue}&page=${counterOfPage}&apikey=b626f23c`);
     let movieId = await response.json();
     createMovieList(movieId)
 }
